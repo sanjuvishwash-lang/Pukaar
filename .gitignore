@@ -1,0 +1,22 @@
+# Raw Figma exports, extraction notes and working files (not for publishing)
+assets/
+content/
+fonts/
+web/
+_p*.html
+
+# Secrets and local config
+.env
+.env.*
+*.pem
+*.key
+.vercel/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+node_modules/
+__pycache__/
