@@ -70,9 +70,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 .num{font-variant-numeric:tabular-nums}
 
 /* ---------- top bar ---------- */
-.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(245,246,250,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
-.bar.scrolled{border-bottom-color:var(--line)}
-.bar-in{display:flex;align-items:center;gap:16px;height:60px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;height:60px;pointer-events:none}
+.bar-in{position:relative;pointer-events:auto;display:flex;align-items:center;gap:16px;height:60px;box-sizing:border-box;border:1px solid transparent;border-radius:0;background:transparent;box-shadow:none;overflow:hidden;
+  transition:max-width .6s cubic-bezier(.22,1,.36,1),height .6s cubic-bezier(.22,1,.36,1),margin .6s cubic-bezier(.22,1,.36,1),padding .6s cubic-bezier(.22,1,.36,1),border-radius .6s cubic-bezier(.22,1,.36,1),background-color .6s cubic-bezier(.22,1,.36,1),border-color .6s cubic-bezier(.22,1,.36,1),box-shadow .6s cubic-bezier(.22,1,.36,1),-webkit-backdrop-filter .6s cubic-bezier(.22,1,.36,1),backdrop-filter .6s cubic-bezier(.22,1,.36,1)}
+.bar.scrolled .bar-in{max-width:min(760px,calc(100% - 24px));height:54px;margin-top:10px;padding-inline:20px 8px;border-radius:999px;background:rgba(255,255,255,.72);border-color:rgba(115,67,136,.12);box-shadow:0 12px 32px -14px rgba(69,43,79,.28),0 2px 6px -2px rgba(69,43,79,.08);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6)}
+.bar.scrolled .toc{right:max(12px,calc(50% - 380px));top:74px}
+@media (max-width:640px){.bar.scrolled .bar-in{max-width:calc(100% - 20px);padding-inline:14px 6px;height:50px}}
+@media (prefers-reduced-motion:reduce){.bar-in{transition:none}}
 .brand{display:flex;align-items:center;gap:8px;text-decoration:none}
 .brand img{width:30px;height:auto}
 .wordmark{font-family:"Nunito",var(--sans);font-weight:800;font-size:21px;letter-spacing:-.3px;background:linear-gradient(167.6deg,#AB85B9 6%,#452B4F 94%);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -81,7 +85,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .bar-now .n{color:var(--p700);font-weight:700}
 .toc-btn{border:1px solid var(--line-2);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .toc-btn:hover{border-color:var(--p300);background:var(--p50)}
-.progress{position:absolute;left:0;bottom:-1px;height:2px;background:var(--p700);width:0;transition:width .1s linear}
+.progress{position:absolute;left:0;bottom:0;height:2px;background:var(--p700);width:0;opacity:0;transition:width .1s linear,opacity .4s ease}
+.bar.scrolled .progress{opacity:.9}
 .toc{position:absolute;right:var(--gutter);top:64px;width:min(340px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px rgba(69,43,79,.14);padding:10px;max-height:calc(100vh - 90px);overflow:auto}
 .toc a{display:grid;grid-template-columns:38px 1fr;gap:6px;padding:9px 10px;border-radius:10px;text-decoration:none;color:var(--ink);font-size:15px}
 .toc a span{color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
@@ -710,8 +715,8 @@ dialog.lb .x{position:absolute;right:-8px;top:-44px;border:0;background:#fff;bor
     <a class="brand" href="#top" aria-label="Pukaar.ai, back to top"><img src="icons/logo-mark.svg" alt=""><span class="wordmark">pukaar.ai</span></a>
     <div class="bar-now" aria-live="polite"><span class="n" id="nowNum">00</span><b id="nowName">Cover</b></div>
     <button class="toc-btn" id="tocBtn" aria-expanded="false" aria-controls="toc">Contents <svg class="i" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button>
+    <div class="progress" id="progress"></div>
   </div>
-  <div class="progress" id="progress"></div>
   <nav class="toc" id="toc" hidden aria-label="Chapters"></nav>
 </header>
 
@@ -1153,7 +1158,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!toc.hidden){toc.hi
 function onScroll(){
   const h=document.documentElement,max=h.scrollHeight-h.clientHeight;
   $('#progress').style.width=(max>0?h.scrollTop/max*100:0)+'%';
-  $('#bar').classList.toggle('scrolled',h.scrollTop>10);
+  $('#bar').classList.toggle('scrolled',h.scrollTop>24);
   let cur=chapters[0];for(const c of chapters){if(c.getBoundingClientRect().top<innerHeight*.35)cur=c}
   const n=cur.dataset.ch;$('#nowNum').textContent=(n==='00'||n==='15')?'':n;$('#nowName').textContent=cur.dataset.name;
   $$('a',toc).forEach(a=>a.classList.toggle('on',a.dataset.ch===n));
