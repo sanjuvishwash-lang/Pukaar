@@ -611,6 +611,98 @@ dialog.lb figcaption{color:#fff;text-align:center;margin-top:12px;font-size:14px
 dialog.lb .x{position:absolute;right:-8px;top:-44px;border:0;background:#fff;border-radius:999px;padding:6px 14px;font-weight:500;font-size:14px}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--p900);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:all .25s;z-index:60}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ================= tablet and phone refinements ================= */
+.cmp-swipe{display:none}
+@media (max-width:1100px){
+  /* research: drop the hand-drawn connector, keep the staggered pair */
+  .ps{grid-template-columns:1fr 1fr;column-gap:24px}
+  .ps .card:last-child{grid-column:auto;margin-top:72px}
+  .ps-link{display:none}
+  /* comparison table fits the width */
+  table.cmp{min-width:640px}
+  .cmp thead th{font-size:17px;padding:14px 8px}
+  .cmp tbody td:first-child{font-size:16px}
+  .cmp th,.cmp td{padding:12px 8px}
+  .chk{width:26px;height:26px}
+  /* information architecture becomes a grid of area cards */
+  .ia-scroll{overflow:visible}
+  .ia{min-width:0}
+  .ia-trunk,.ia-cols::before,.ia-col::before,.ia-col::after,.ia-cat::after{display:none}
+  .ia-cols{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;padding-top:20px}
+  .ia-col .chip{font-size:13px;padding-inline:6px}
+  .ds{grid-template-columns:1fr}
+  .ds-col{grid-template-columns:1fr 1fr;align-items:stretch}
+  .icons-card{aspect-ratio:auto;min-height:240px}
+  .ia-col{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}
+  .ia-cat{margin-bottom:4px}
+  .ia.focus .ia-col{opacity:.45}
+}
+@media (max-width:900px){
+  .ia-cols{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tabs{flex-wrap:nowrap;overflow-x:auto;border-radius:999px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto}
+}
+@media (max-width:880px){
+  /* design process: vertical timeline */
+  .process{grid-template-columns:1fr;justify-items:stretch;gap:0;position:relative}
+  .process::before{content:"";position:absolute;left:27px;top:28px;bottom:28px;width:2px;background:repeating-linear-gradient(to bottom,var(--p300) 0 6px,transparent 6px 12px)}
+  .node{width:56px;height:56px;font-size:13px;font-weight:700;position:relative;z-index:1}
+  .step-btn{display:grid;grid-template-columns:56px 40px 1fr;align-items:center;gap:0 14px;height:auto;padding:14px 0;width:100%}
+  .step-btn::before{position:relative;inset:auto;grid-column:1;grid-row:1;justify-self:center;width:14px;height:14px;border:2px solid var(--p300);border-radius:50%;background:var(--bg);-webkit-mask-image:none;mask-image:none;z-index:1}
+  .step-btn[aria-pressed="true"]::before,.step-btn:hover::before{background:var(--p700);border-color:var(--p700)}
+  .step-btn .sn{grid-column:2;font-size:22px;background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#C4C4CC;-webkit-text-fill-color:currentColor}
+  .step-btn[aria-pressed="true"] .sn{background:none;color:var(--p700)}
+  .step-btn .sl{grid-column:3;margin-top:0;font-size:17px;line-height:1.3}
+  .step-note a{margin-left:0}
+}
+@media (max-width:760px){
+  .chapter{padding-block:56px}
+  .ps{grid-template-columns:1fr;row-gap:20px}
+  .ps .card:last-child{margin-top:0}
+  .ds-col{grid-template-columns:1fr}
+  .icons-card{aspect-ratio:577/241;min-height:0}
+  .ch-head{margin-bottom:28px}
+  .sub{font-size:16px;line-height:24px}
+  /* table: sticky feature column + swipe hint */
+  table.cmp{min-width:560px}
+  .cmp th:first-child,.cmp td:first-child{position:sticky;left:0;z-index:1;width:40%;box-shadow:1px 0 0 #E7E7E7}
+  .cmp tbody td:first-child{background:#fff;font-size:14.5px}
+  .cmp tbody tr:nth-child(even) td:first-child{background:#F6F6F6}
+  .cmp thead th:first-child{background:var(--p700)}
+  .cmp tfoot td:first-child{background:var(--p50)}
+  .cmp thead th{font-size:14px}
+  .cmp td .cap{font-size:12px}
+  .cmp-swipe{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-top:14px}
+  /* IA: compact chips per area */
+  .ia-cols{grid-template-columns:1fr}
+  .ia-col{flex-direction:row;flex-wrap:wrap;gap:8px}
+  .ia-col .ia-cat{width:100%;height:42px}
+  .ia-col .chip:not(.ia-cat){width:auto;height:34px;font-size:13px;padding:0 12px;border-radius:999px;-webkit-mask-image:none!important;mask-image:none!important}
+  .ia-col .more,.ia-col .count{align-self:center;margin:0 4px}
+  /* palette: neutral swatches wrap into two rows */
+  .neutral .strip{flex-wrap:wrap}
+  .neutral .sw{flex:0 0 calc(100% / 6)}
+  .sizes{gap:2px}
+  .sizes button{padding:6px 5px}
+  /* key flow copy */
+  .flow-copy p{font-size:17px}
+  .flow-nav .pill{padding:9px 14px;font-size:14px}
+  /* final UI tabs: horizontal scroll strip instead of wrapping */
+  .tabs{flex-wrap:nowrap;overflow-x:auto;border-radius:999px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;padding:10px 16px}
+  .ui-copy{padding:26px 22px 8px}
+  .thanks h2{font-size:clamp(52px,15vw,72px)}
+}
+@media (max-width:420px){
+  .stats{gap:28px 20px}
+  .pointer{padding-left:16px}
+  .pointer .l{font-size:17px}
+  .pv-quote p{font-size:19px}
+  .decisions,.callouts{gap:16px}
+}
 </style>
 
 <header class="bar" id="bar">
@@ -773,7 +865,7 @@ dialog.lb .x{position:absolute;right:-8px;top:-44px;border:0;background:#fff;bor
         <tfoot></tfoot>
       </table>
     </div>
-    <p class="cmp-hint">Select a product name to highlight its column.</p>
+    <p class="cmp-hint">Select a product name to highlight its column.</p><p class="cmp-swipe">Swipe sideways to see every product <svg class="i" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></p>
   </div>
 </section>
 
