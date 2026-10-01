@@ -360,17 +360,24 @@ table.cmp{border-collapse:collapse;width:100%;min-width:860px}
 .ia-trunk{width:2px;height:46px;background:#9A9AA2}
 .ia-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:28px;width:100%;position:relative;padding-top:44px}
 /* the bus ends on the centre of the first and last column: col width is
-   (100% - 4*28px)/5, so half of that is (100% - 112px)/10 */
-.ia-cols::before{content:"";position:absolute;top:0;left:calc((100% - 112px)/10);right:calc((100% - 112px)/10);height:22px;border:2px solid #9A9AA2;border-bottom:0;border-radius:14px 14px 0 0}
+   (100% - 4*28px)/5, so half of that is (100% - 112px)/10. The extra 1px
+   straddles the centre with the 2px border, matching the drop lines below. */
+.ia-cols::before{content:"";position:absolute;top:0;left:calc((100% - 112px)/10 - 1px);right:calc((100% - 112px)/10 - 1px);height:22px;border:2px solid #9A9AA2;border-bottom:0;border-radius:14px 14px 0 0}
 .ia-col{display:flex;flex-direction:column;gap:12px;position:relative;transition:opacity .25s}
-.ia-col::before{content:"";position:absolute;top:-22px;left:50%;margin-left:-1px;width:2px;height:16px;background:#9A9AA2}
+/* grid items start 44px down; the bus's top border ends at 2px and the arrow
+   takes the last 6px, so an inner column's line runs y=2..38. On the outer two
+   the bus's own rounded sides already carry the line down to y=22. */
+.ia-col::before{content:"";position:absolute;top:-42px;left:50%;margin-left:-1px;width:2px;height:36px;background:#9A9AA2}
+.ia-col:nth-child(1)::before,.ia-col:nth-child(5)::before{top:-22px;height:16px}
 /* no border-bottom, so the 6px triangle is the whole box and its tip lands
    exactly on the top edge of the chip */
 .ia-col::after{content:"";position:absolute;left:50%;top:-6px;margin-left:-5px;border:5px solid transparent;border-bottom:0;border-top:6px solid #9A9AA2}
 .ia-cat{font-weight:700;cursor:pointer;margin-bottom:18px;position:relative}
-/* 18px margin + 12px column gap = 30px to bridge: 24px of line, then the arrow */
-.ia-cat::after{content:"";position:absolute;left:50%;margin-left:-1px;bottom:-24px;width:2px;height:24px;background:#9A9AA2}
-.ia-cat::before{content:"";position:absolute;left:50%;bottom:-30px;margin-left:-5px;border:5px solid transparent;border-bottom:0;border-top:6px solid #9A9AA2}
+/* 18px margin + 12px column gap = 30px to bridge: line, then the arrow.
+   `bottom` resolves against the padding box, so the chip's own 1.5px border
+   has to be added or everything stops short of the chip below. */
+.ia-cat::after{content:"";position:absolute;left:50%;margin-left:-1px;bottom:-25.5px;width:2px;height:25.5px;background:#9A9AA2}
+.ia-cat::before{content:"";position:absolute;left:50%;bottom:-31.5px;margin-left:-5px;border:5px solid transparent;border-bottom:0;border-top:6px solid #9A9AA2}
 .ia-col .more{font-size:12.5px;color:#737373;text-align:center;margin-top:-4px}
 .ia-col .count{font-size:12px;color:var(--muted);text-align:center;font-variant-numeric:tabular-nums}
 .ia.focus .ia-col{opacity:.35}
