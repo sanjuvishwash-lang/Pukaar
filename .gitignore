@@ -3,6 +3,11 @@ assets/
 content/
 fonts/
 web/
+
+# ...but the web fonts the published site actually loads are tracked
+!site/fonts/
+!site/fonts/**
+
 _p*.html
 
 # Secrets and local config
